@@ -90,6 +90,7 @@ function create_user
   sudo cp "$CONFIGS_DIR"/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
   sudo chown -R $BOT_USER_GROUP "$home"
   sudo chmod 600 "$home"/.ssh/authorized_keys
+  sudo dseditgroup -o edit -a bot -t user com.apple.access_ssh
 }
 
 function install_homebrew
