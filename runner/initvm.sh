@@ -24,6 +24,10 @@ CONFIGS_DIR=$SELF_DIR
 ANSI_FG_RESET="\033[0;0m"
 ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 BOT_USER_GROUP=bot:staff
+PASSWORD=$(dd if=/dev/urandom bs=1 count=256 2>/dev/null |
+    LC_ALL=C tr -cd '[:graph:]' |
+    tr -d \'\" |
+    head -c 64)
 
 ### functions ##################################################################
 
@@ -67,19 +71,9 @@ function install_rust
   tar -C /opt -xJf $PACKAGES_DIR/rustup_$version.tar.xz
 }
 
-function setup_user_and_password
+function create_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
-
-  python3 -m venv .venv
-  # shellcheck disable=SC1091 # temporary location
-  source .venv/bin/activate
-  pip install diceware==1.0.1
-  local password
-  password=$(diceware -n3 -d "-")
-  echo "****** YOUR PASSWORD:    $password    *******"
-  deactivate
-  rm -rf .venv
 
   local home=/Users/${BOT_USER_GROUP%%:*}
 
@@ -89,8 +83,8 @@ function setup_user_and_password
   sudo dscl . -create "$home" UniqueID "600"
   sudo dscl . -create "$home" PrimaryGroupID 20 # staff
   sudo dscl . -create "$home" NFSHomeDirectory "$home"
-  sudo dscl . -passwd "$home" "$password"
-  sudo dscl . -passwd /Users/admin admin "$password" # TODO: convenient, but doesn't belong here
+  sudo dscl . -passwd "$home" "$PASSWORD"
+  echo "******   $PASSWORD   ******"
 
   sudo mkdir -p "$home"/.ssh
   sudo cp "$CONFIGS_DIR"/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
@@ -103,7 +97,7 @@ function install_homebrew
   _mkdir /opt/homebrew
   curl -L https://github.com/Homebrew/brew/tarball/main |
       tar xz --strip-components 1 -C /opt/homebrew
-  sudo chown -R $BOT_USER_GROUP /opt/homebrew
+  chmod -R g+w /opt/homebrew
 }
 
 function set_hostname
@@ -172,7 +166,17 @@ function install_xcode_clt
   fi
 }
 
+function set_admin_password
+{
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
+
+  sudo dscl . -passwd /Users/admin admin "$PASSWORD"
+  echo "******   $PASSWORD   ******"
+}
+
 ### main #######################################################################
+
+echo "----------------------------------------------------"
 
 # OS updates and installs
 update_macos
@@ -180,12 +184,15 @@ install_xcode_clt
 set_hostname "$1"
 
 # software
-install_macports
-install_sdk
-install_rust
-install_gitlabrunner
 install_ccache
-
-# user and related software
-setup_user_and_password
+install_gitlabrunner
 install_homebrew
+install_macports
+install_rust
+install_sdk
+
+# users
+create_user
+set_admin_password
+
+echo "----------------------------------------------------"
