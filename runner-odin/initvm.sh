@@ -6,11 +6,7 @@
 
 ### description ################################################################
 
-# runner-odin
-#
-# TODO: This script is neither consistent nor optimized because I hven't
-#       decided in which direction to take this. But it's a start.
-#       Or maybe replace with Ansible?
+# TBD
 
 ### shellcheck #################################################################
 
@@ -28,15 +24,23 @@ CONFIGS_DIR=$SELF_DIR
 
 ### functions ##################################################################
 
+function _mkdir
+{
+  local dir=${1:?}
+  local delete_if_exists=${2:true}
+
+  if [ -d "$dir" ] && $delete_if_exists; then
+    sudo rm -rf "$dir"
+  fi
+  sudo mkdir "$dir"
+  sudo chown admin:staff "$dir"
+}
+
 function install_macports
 {
   echo "${FUNCNAME[0]}"
 
-  if [ -d /opt/macports ]; then
-    sudo rm -rf /opt/macports
-  fi
-  sudo mkdir /opt/macports
-  sudo chown admin:staff /opt/macports
+  _mkdir /opt/macports
   tar -C /opt -xJf $PACKAGES_DIR/macports15.tar.xz
 }
 
@@ -44,11 +48,7 @@ function install_sdk
 {
   echo "${FUNCNAME[0]}"
 
-  if [ -d /opt/sdks ]; then
-    sudo rm -rf /opt/sdks
-  fi
-  sudo mkdir /opt/sdks
-  sudo chown admin:staff /opt/sdks
+  _mkdir /opt/sdks
   tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx113sdk.tar.xz
 }
 
@@ -56,11 +56,7 @@ function install_rust
 {
   echo "${FUNCNAME[0]}"
 
-  if [ -d /opt/rustup ]; then
-    sudo rm -rf /opt/rustup
-  fi
-  sudo mkdir /opt/rustup
-  sudo chown admin:staff /opt/rustup
+  _mkdir /opt/rustup
   tar -C /opt -xJf $PACKAGES_DIR/rustup_1860.tar.xz
 }
 
@@ -114,20 +110,18 @@ function install_gitlabrunner
 {
   echo "${FUNCNAME[0]}"
 
-  sudo mkdir -p /usr/local/bin
-  sudo chown admin:staff /usr/local/bin
-
+  _mkdir /usr/local/bin
   tar -C /usr/local/bin -xJf $PACKAGES_DIR/gitlab-runner_17101.tar.xz
 }
 
 function install_ccache
 {
-  sudo mkdir /opt/ccache
-  sudo chown admin:staff /opt/ccache
+  echo "${FUNCNAME[0]}"
 
   local ccache_ver=4.11.3
   local ccache_url=https://github.com/ccache/ccache/releases/download/v$ccache_ver/ccache-$ccache_ver-darwin.tar.gz
 
+  _mkdir /opt/ccache
   curl -L "$ccache_url" | tar -C /opt/ccache -xz --strip-components 1
 }
 
