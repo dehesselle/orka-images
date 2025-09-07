@@ -48,16 +48,20 @@ function install_sdk
 {
   echo "${FUNCNAME[0]}"
 
+  local version=113
+
   _mkdir /opt/sdks
-  tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx113sdk.tar.xz
+  tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx${version}sdk.tar.xz
 }
 
 function install_rust
 {
   echo "${FUNCNAME[0]}"
 
+  local version=1860
+
   _mkdir /opt/rustup
-  tar -C /opt -xJf $PACKAGES_DIR/rustup_1860.tar.xz
+  tar -C /opt -xJf $PACKAGES_DIR/rustup_$version.tar.xz
 }
 
 function setup_user_and_password
@@ -112,8 +116,10 @@ function install_gitlabrunner
 {
   echo "${FUNCNAME[0]}"
 
+  local version=17101
+
   _mkdir /usr/local/bin
-  tar -C /usr/local/bin -xJf $PACKAGES_DIR/gitlab-runner_17101.tar.xz
+  tar -C /usr/local/bin -xJf $PACKAGES_DIR/gitlab-runner_$version.tar.xz
 }
 
 function install_ccache
@@ -131,10 +137,12 @@ function update_macos
 {
   echo "${FUNCNAME[0]}"
 
-  if [ "$(sw_vers | grep ProductVersion | awk '{print $2}')" = "15.6.1" ]; then
-    sudo softwareupdate -i -R "macOS Sequoia 15.6.1-24G90"
-  else
+  local version=15.6.1-24G90
+
+  if [ "$(sw_vers | grep ProductVersion | awk '{print $2}')" = "${version%%-*}" ]; then
     echo "no update required"
+  else
+    sudo softwareupdate -i -R "macOS Sequoia $version"
   fi
 }
 
@@ -142,9 +150,15 @@ function install_xcode_clt
 {
   echo "${FUNCNAME[0]}"
 
-  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-  softwareupdate -i "Command Line Tools for Xcode-16.4"
-  rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  local version=16.4
+
+  if [ -d "/Library/Developer/CommandLineTools" ]; then
+    echo "no installation required"
+  else
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    softwareupdate -i "Command Line Tools for Xcode-$version"
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  fi
 }
 
 ### main #######################################################################
