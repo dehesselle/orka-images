@@ -60,7 +60,7 @@ function install_rust
   tar -C /opt -xJf $PACKAGES_DIR/rustup_1860.tar.xz
 }
 
-function create_user
+function setup_user_and_password
 {
   echo "${FUNCNAME[0]}"
 
@@ -95,8 +95,10 @@ function set_hostname
 {
   echo "${FUNCNAME[0]}"
 
-  sudo /usr/libexec/PlistBuddy -c "Set :System:System:ComputerName runner" /Library/Preferences/SystemConfiguration/preferences.plist
-  sudo /usr/libexec/PlistBuddy -c "Set :System:Network:HostNames:LocalHostName runner" /Library/Preferences/SystemConfiguration/preferences.plist
+  local name=$1
+
+  sudo /usr/libexec/PlistBuddy -c "Set :System:System:ComputerName $name" /Library/Preferences/SystemConfiguration/preferences.plist
+  sudo /usr/libexec/PlistBuddy -c "Set :System:Network:HostNames:LocalHostName $name" /Library/Preferences/SystemConfiguration/preferences.plist
 }
 
 function setup_ramdisk
@@ -125,13 +127,35 @@ function install_ccache
   curl -L "$ccache_url" | tar -C /opt/ccache -xz --strip-components 1
 }
 
+function update_macos
+{
+  echo "${FUNCNAME[0]}"
+
+  if [ "$(sw_vers | grep ProductVersion | awk '{print $2}')" = "15.6.1" ]; then
+    sudo softwareupdate -i -R "macOS Sequoia 15.6.1-24G90"
+  else
+    echo "no update required"
+  fi
+}
+
+function install_xcode_clt
+{
+  echo "${FUNCNAME[0]}"
+
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  softwareupdate -i "Command Line Tools for Xcode-16.4"
+  rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+}
+
 ### main #######################################################################
 
+update_macos
+install_xcode_clt
 install_macports
 install_sdk
 install_rust
-create_user
-set_hostname
+setup_user_and_password
+set_hostname "$1"
 #setup_ramdisk
 install_gitlabrunner
 install_ccache
