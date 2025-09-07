@@ -94,6 +94,8 @@ function create_user
 
 function install_homebrew
 {
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
+
   _mkdir /opt/homebrew
   curl -L https://github.com/Homebrew/brew/tarball/main |
       tar xz --strip-components 1 -C /opt/homebrew
