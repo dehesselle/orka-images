@@ -21,6 +21,8 @@
 SELF_DIR=$(dirname "${BASH_SOURCE[0]}")
 PACKAGES_DIR=/Volumes/orka/packages
 CONFIGS_DIR=$SELF_DIR
+ANSI_FG_RESET="\033[0;0m"
+ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 
 ### functions ##################################################################
 
@@ -38,7 +40,7 @@ function _mkdir
 
 function install_macports
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   _mkdir /opt/macports
   tar -C /opt -xJf $PACKAGES_DIR/macports15.tar.xz
@@ -46,7 +48,7 @@ function install_macports
 
 function install_sdk
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local version=113
 
@@ -56,7 +58,7 @@ function install_sdk
 
 function install_rust
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local version=1860
 
@@ -66,7 +68,7 @@ function install_rust
 
 function setup_user_and_password
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   python3 -m venv .venv
   # shellcheck disable=SC1091 # temporary location
@@ -97,7 +99,7 @@ function setup_user_and_password
 
 function set_hostname
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local name=$1
 
@@ -107,14 +109,14 @@ function set_hostname
 
 function setup_ramdisk
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   sudo cp /Volumes/orka/config/local.volumes.ram.plist /Library/LaunchDaemons
 }
 
 function install_gitlabrunner
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local version=17101
 
@@ -124,7 +126,7 @@ function install_gitlabrunner
 
 function install_ccache
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local ccache_ver=4.11.3
   local ccache_url=https://github.com/ccache/ccache/releases/download/v$ccache_ver/ccache-$ccache_ver-darwin.tar.gz
@@ -135,7 +137,7 @@ function install_ccache
 
 function update_macos
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local version=15.6.1-24G90
 
@@ -148,7 +150,7 @@ function update_macos
 
 function install_xcode_clt
 {
-  echo "${FUNCNAME[0]}"
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
   local version=16.4
 
