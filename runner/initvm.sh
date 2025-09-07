@@ -23,6 +23,7 @@ PACKAGES_DIR=/Volumes/orka/packages
 CONFIGS_DIR=$SELF_DIR
 ANSI_FG_RESET="\033[0;0m"
 ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
+BOT_USER_GROUP=bot:staff
 
 ### functions ##################################################################
 
@@ -80,21 +81,29 @@ function setup_user_and_password
   deactivate
   rm -rf .venv
 
-  sudo dscl . -create /Users/bot
-  sudo dscl . -create /Users/bot UserShell /bin/zsh
-  sudo dscl . -create /Users/bot RealName "Robot Bottington"
-  sudo dscl . -create /Users/bot UniqueID "600"
-  sudo dscl . -create /Users/bot PrimaryGroupID 20 # staff
-  sudo dscl . -create /Users/bot NFSHomeDirectory /Users/bot
-  sudo dscl . -passwd /Users/bot "$password"
+  local home=/Users/${BOT_USER_GROUP%%:*}
+
+  sudo dscl . -create "$home"
+  sudo dscl . -create "$home" UserShell /bin/zsh
+  sudo dscl . -create "$home" RealName "Robot Bottington"
+  sudo dscl . -create "$home" UniqueID "600"
+  sudo dscl . -create "$home" PrimaryGroupID 20 # staff
+  sudo dscl . -create "$home" NFSHomeDirectory "$home"
+  sudo dscl . -passwd "$home" "$password"
   sudo dscl . -passwd /Users/admin admin "$password" # TODO: convenient, but doesn't belong here
 
-  sudo mkdir -p /Users/bot/.ssh
-  sudo cp "$CONFIGS_DIR"/bot@runner_ecdsa.pub /Users/bot/.ssh/authorized_keys
-  sudo chown -R bot:staff /Users/bot/.ssh
-  sudo chmod 600 /Users/bot/.ssh/authorized_keys
+  sudo mkdir -p "$home"/.ssh
+  sudo cp "$CONFIGS_DIR"/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
+  sudo chown -R $BOT_USER_GROUP "$home"
+  sudo chmod 600 "$home"/.ssh/authorized_keys
+}
 
-  sudo chown -R bot:staff /opt/homebrew
+function install_homebrew
+{
+  _mkdir /opt/homebrew
+  curl -L https://github.com/Homebrew/brew/tarball/main |
+      tar xz --strip-components 1 -C /opt/homebrew
+  sudo chown -R $BOT_USER_GROUP /opt/homebrew
 }
 
 function set_hostname
@@ -165,13 +174,18 @@ function install_xcode_clt
 
 ### main #######################################################################
 
+# OS updates and installs
 update_macos
 install_xcode_clt
+set_hostname "$1"
+
+# software
 install_macports
 install_sdk
 install_rust
-setup_user_and_password
-set_hostname "$1"
-#setup_ramdisk
 install_gitlabrunner
 install_ccache
+
+# user and related software
+setup_user_and_password
+install_homebrew
