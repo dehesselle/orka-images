@@ -55,10 +55,15 @@ function install_sdk
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=113
+  local version=(
+    113
+    155
+  )
 
   _mkdir /opt/sdks
-  tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx${version}sdk.tar.xz
+  for v in "${version[@]}"; do
+    tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx"${v}"sdk.tar.xz
+  done
 }
 
 function install_rust
