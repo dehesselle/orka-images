@@ -155,6 +155,7 @@ function update_macos
   if [ "$(sw_vers | grep ProductVersion | awk '{print $2}')" = "${version%%-*}" ]; then
     echo "no update required"
   else
+    echo "run 'bash orka-images/runner/initvm.sh runner' after reboot"
     sudo softwareupdate -i -R "macOS Sequoia $version"
   fi
 }
@@ -182,9 +183,26 @@ function set_admin_password
   echo "******   $PASSWORD   ******"
 }
 
+function bootstrap
+{
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
+
+  if [ -d "$(pwd)"/orka-images ]; then
+    echo "already bootstrapped"
+  else
+    mkdir orka-images
+    curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/main.zip |
+        bsdtar -C orka-images --strip-components 1 -xvf-
+    bash orka-images/runner/initvm.sh runner
+    exit $?
+  fi
+}
+
 ### main #######################################################################
 
 echo "----------------------------------------------------"
+
+bootstrap
 
 # OS updates and installs
 update_macos

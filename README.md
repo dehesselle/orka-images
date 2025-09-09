@@ -4,8 +4,9 @@ TBD
 
 ## Build
 
+From inside the machine, run:
+
 ```bash
-mkdir orka-images
-curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/main.zip | bsdtar -C orka-images --strip-components 1 -xvf-
-bash orka-images/runner/initvm.sh runner
+curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner/initvm.sh | bash
+
 ```
