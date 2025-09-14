@@ -53,14 +53,42 @@ function ensure_admin_user
   fi
 }
 
+function _create_ramdisk
+{
+  local size=$1
+
+  diskutil erasevolume HFS+ "RAM" "$(diskutil image attach ram://"${size}"GiB)"
+}
+
 function install_macports
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=${PRODUCT_VERSION%%.*}
+  local version=2.11.5
 
+  _create_ramdisk 2
   _mkdir /opt/macports
-  tar -C /opt -xJf $PACKAGES_DIR/macports"$version".tar.xz
+
+  curl -L https://github.com/macports/macports-base/releases/download/v$version/MacPorts-$version.tar.bz2 |
+      tar -C /Volumes/RAM -xj
+
+  (
+    cd /Volumes/RAM/MacPorts-$version || exit 1
+    ./configure \
+        --prefix=/opt/macports \
+        --with-unsupported-prefix \
+        --with-no-root-privileges \
+        --with-install-user=admin \
+        --with-install-group=staff \
+        --with-macports-user=admin \
+        --with-applications-dir=/opt/macports/Applications \
+        --with-frameworks-dir=/opt/macports/Frameworks \
+        --without-startupitems
+    make -j "$(sysctl -n hw.ncpu)"
+    make install
+    chown -R admin:staff /opt/macports
+    chmod -R g+w /opt/macports
+  )
 }
 
 function install_sdk
