@@ -2,11 +2,8 @@
 
 TBD
 
-## Build
-
-From inside the machine, run:
+## Sequoia runner
 
 ```bash
-curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner/initvm.sh | bash
-
+curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner-sequoia/initvm.sh | bash
 ```
