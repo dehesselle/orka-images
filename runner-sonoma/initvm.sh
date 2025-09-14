@@ -6,7 +6,7 @@
 
 ### description ################################################################
 
-# Initialize runner on Sequoia.
+# Initialize runner on Sonoma.
 
 ### shellcheck #################################################################
 
@@ -22,7 +22,7 @@ fi
 ### variables ##################################################################
 
 REPO_DIR=$HOME/orka-images
-SELF_NAME=runner-sequoia
+SELF_NAME=runner-sonoma
 
 ### functions ##################################################################
 
@@ -32,7 +32,7 @@ function bootstrap
     echo "already bootstrapped"
   else
     mkdir "$REPO_DIR"
-    curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/main.zip |
+    curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/develop.zip |
         bsdtar -C "$REPO_DIR" --strip-components 1 -xvf-
     bash "$REPO_DIR"/$SELF_NAME/initvm.sh
     exit $?
@@ -46,8 +46,8 @@ echo "----------------------------------------------------"
 bootstrap
 
 # OS updates and installs
-update_macos "macOS Sequoia 15.6.1-24G90"
-install_xcode_clt "16.4"
+update_macos "macOS Sonoma 14.7.8-23H730"
+install_xcode_clt "16.2"
 set_hostname
 
 # software
@@ -57,7 +57,6 @@ install_homebrew
 install_macports
 install_rust
 install_sdk 113
-install_sdk 155
 
 # users
 create_user
