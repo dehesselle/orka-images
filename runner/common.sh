@@ -164,10 +164,13 @@ function install_gitlabrunner
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=17101
+  local version=17.11.4
 
-  _mkdir /usr/local/bin
-  tar -C /usr/local/bin -xJf $PACKAGES_DIR/gitlab-runner_$version.tar.xz
+  _mkdir /usr/local/bin false
+ 
+  curl -o /usr/local/bin/gitlab-runner \
+      -L https://gitlab-runner-downloads.s3.amazonaws.com/v$version/binaries/gitlab-runner-darwin-arm64
+  chmod 755 /usr/local/bin/gitlab-runner
 }
 
 function install_ccache
