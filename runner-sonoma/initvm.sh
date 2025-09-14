@@ -32,7 +32,7 @@ function bootstrap
     echo "already bootstrapped"
   else
     mkdir "$REPO_DIR"
-    curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/develop.zip |
+    curl -L https://github.com/dehesselle/orka-images/archive/refs/heads/main.zip |
         bsdtar -C "$REPO_DIR" --strip-components 1 -xvf-
     bash "$REPO_DIR"/$SELF_NAME/initvm.sh
     exit $?
