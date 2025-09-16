@@ -55,7 +55,7 @@ install_ccache
 install_gitlabrunner
 install_homebrew
 install_macports
-install_rust
+install_rust "1.89.0"
 install_sdk 113
 
 # users

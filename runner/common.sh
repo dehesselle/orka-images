@@ -102,10 +102,15 @@ function install_rust
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=1860
+  local version=$1
 
   _mkdir /opt/rustup
-  tar -C /opt -xJf $PACKAGES_DIR/rustup_$version.tar.xz
+
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |
+      RUSTUP_HOME=/opt/rustup sh -s -- \
+          -y \
+          --default-toolchain "$version"-aarch64-apple-darwin \
+          --no-modify-path
 }
 
 function setup_bot_user
