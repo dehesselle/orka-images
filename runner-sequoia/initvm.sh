@@ -60,7 +60,7 @@ install_sdk 113
 install_sdk 155
 
 # users
-create_user
-set_admin_password
+setup_bot_user
+setup_admin_user
 
 echo "----------------------------------------------------"

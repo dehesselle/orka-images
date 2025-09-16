@@ -23,10 +23,7 @@ REPO_DIR=$HOME/orka-images
 ANSI_FG_RESET="\033[0;0m"
 ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 BOT_USER_GROUP=bot:staff
-PASSWORD=$(dd if=/dev/urandom bs=1 count=256 2>/dev/null |
-    LC_ALL=C tr -cd '[:graph:]' |
-    tr -d \'\" |
-    head -c 64)
+ADMIN_USER_GROUP=admin:staff
 PRODUCT_VERSION=$(sw_vers | grep ProductVersion | awk '{print $2}')
 
 ### functions ##################################################################
@@ -39,8 +36,8 @@ function _mkdir
   if [ -d "$dir" ] && $delete_if_exists; then
     sudo rm -rf "$dir"
   fi
-  sudo mkdir "$dir"
-  sudo chown admin:staff "$dir"
+  sudo mkdir -p "$dir"
+  sudo chown $ADMIN_USER_GROUP "$dir"
 }
 
 function ensure_admin_user
@@ -86,7 +83,7 @@ function install_macports
         --without-startupitems
     make -j "$(sysctl -n hw.ncpu)"
     make install
-    chown -R admin:staff /opt/macports
+    chown -R $ADMIN_USER_GROUP /opt/macports
     chmod -R g+w /opt/macports
   )
 }
@@ -111,7 +108,7 @@ function install_rust
   tar -C /opt -xJf $PACKAGES_DIR/rustup_$version.tar.xz
 }
 
-function create_user
+function setup_bot_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
@@ -123,10 +120,9 @@ function create_user
   sudo dscl . -create "$home" UniqueID "600"
   sudo dscl . -create "$home" PrimaryGroupID 20 # staff
   sudo dscl . -create "$home" NFSHomeDirectory "$home"
-  sudo dscl . -passwd "$home" "$PASSWORD"
-  echo "******   $PASSWORD   ******"
+  sudo dscl . -passwd "$home" start123
 
-  sudo mkdir -p "$home"/.ssh
+  _mkdir "$home"/.ssh
   sudo cp "$REPO_DIR"/runner/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
   sudo chown -R $BOT_USER_GROUP "$home"
   sudo chmod 600 "$home"/.ssh/authorized_keys
@@ -214,12 +210,15 @@ function install_xcode_clt
   fi
 }
 
-function set_admin_password
+function setup_admin_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  sudo dscl . -passwd /Users/admin admin "$PASSWORD"
-  echo "******   $PASSWORD   ******"
+  _mkdir "$HOME"/.ssh
+  cp "$REPO_DIR"/runner/bot@runner_ecdsa.pub "$HOME"/.ssh/authorized_keys
+  chmod 600 "$HOME"/.ssh/authorized_keys
+
+  sudo bash -c 'echo "%admin ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/admin_no_pw'
 }
 
 ### main #######################################################################
