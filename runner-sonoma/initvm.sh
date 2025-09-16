@@ -46,7 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # OS updates and installs
-update_macos "macOS Sonoma 14.7.8-23H730"
+update_macos "macOS Sonoma 14.8-23J21"
 install_xcode_clt "16.2"
 set_hostname
 
