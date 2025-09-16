@@ -46,7 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # OS updates and installs
-update_macos "macOS Sequoia 15.6.1-24G90"
+update_macos "macOS Sequoia 15.7-24G222"
 install_xcode_clt "16.4"
 set_hostname
 
