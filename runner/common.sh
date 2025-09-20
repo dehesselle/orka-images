@@ -52,9 +52,11 @@ function ensure_admin_user
 
 function _create_ramdisk
 {
-  local size=$1
+  local size=${1:-1}
 
-  diskutil erasevolume HFS+ "RAM" "$(diskutil image attach ram://"${size}"GiB)"
+  if [ ! -d /Volumes/RAM ]; then
+    diskutil erasevolume HFS+ "RAM" "$(diskutil image attach ram://"${size}"GiB)"
+  fi
 }
 
 function install_macports
@@ -63,7 +65,7 @@ function install_macports
 
   local version=2.11.5
 
-  _create_ramdisk 2
+  _create_ramdisk
   _mkdir /opt/macports
 
   curl -L https://github.com/macports/macports-base/releases/download/v$version/MacPorts-$version.tar.bz2 |
