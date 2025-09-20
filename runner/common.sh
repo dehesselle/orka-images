@@ -24,7 +24,7 @@ ANSI_FG_RESET="\033[0;0m"
 ANSI_FG_YELLOW_BRIGHT="\033[0;93m"
 BOT_USER_GROUP=bot:staff
 ADMIN_USER_GROUP=admin:staff
-PRODUCT_VERSION=$(sw_vers | grep ProductVersion | awk '{print $2}')
+PRODUCT_VERSION=$(sw_vers -productVersion)
 
 ### functions ##################################################################
 
@@ -113,6 +113,43 @@ function install_rust
           --no-modify-path
 }
 
+function _banner
+{
+  local version=${PRODUCT_VERSION%%.*}
+
+  # font "Small Block"
+  case $version in
+    14)
+      cat << EOF
+╔════════════════════════════════════════════╗
+║                                            ║
+║  ▙▀▖▌ ▌▛▀▖▛▀▖▞▀▖▙▀▖▄▄▖▞▀▘▞▀▖▛▀▖▞▀▖▛▚▀▖▝▀▖  ║
+║  ▌  ▌ ▌▌ ▌▌ ▌▛▀ ▌     ▝▀▖▌ ▌▌ ▌▌ ▌▌▐ ▌▞▀▌  ║
+║  ▘  ▝▀▘▘ ▘▘ ▘▝▀▘▘     ▀▀ ▝▀ ▘ ▘▝▀ ▘▝ ▘▝▀▘  ║
+║  image:    $(printf '%30s' "$(TZ=UTC date)")  ║
+║                                            ║
+╚════════════════════════════════════════════╝
+EOF
+      ;;
+    15)
+      cat << EOF
+╔═════════════════════════════════════════════╗
+║                                             ║
+║                                      ▗      ║
+║  ▙▀▖▌ ▌▛▀▖▛▀▖▞▀▖▙▀▖▄▄▖▞▀▘▞▀▖▞▀▌▌ ▌▞▀▖▄ ▝▀▖  ║
+║  ▌  ▌ ▌▌ ▌▌ ▌▛▀ ▌     ▝▀▖▛▀ ▚▄▌▌ ▌▌ ▌▐ ▞▀▌  ║
+║  ▘  ▝▀▘▘ ▘▘ ▘▝▀▘▘     ▀▀ ▝▀▘  ▌▝▀▘▝▀ ▀▘▝▀▘  ║
+║  image:     $(printf '%30s' "$(TZ=UTC date)")  ║
+║                                             ║
+╚═════════════════════════════════════════════╝
+EOF
+      ;;
+    *)
+      :
+      ;;
+  esac
+}
+
 function setup_bot_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
@@ -126,12 +163,14 @@ function setup_bot_user
   sudo dscl . -create "$home" PrimaryGroupID 20 # staff
   sudo dscl . -create "$home" NFSHomeDirectory "$home"
   sudo dscl . -passwd "$home" start123
+  sudo dseditgroup -o edit -a bot -t user com.apple.access_ssh
 
   _mkdir "$home"/.ssh
   sudo cp "$REPO_DIR"/runner/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
-  sudo chown -R $BOT_USER_GROUP "$home"
   sudo chmod 600 "$home"/.ssh/authorized_keys
-  sudo dseditgroup -o edit -a bot -t user com.apple.access_ssh
+  sudo bash -c "echo -e \"cat << EOF\n$(_banner)\nEOF\" > $home/.ssh/rc"
+  sudo bash -c "echo \"mv $home/.ssh/rc $home/.ssh/rc.disabled\" >> $home/.ssh/rc"
+  sudo chown -R $BOT_USER_GROUP "$home"
 }
 
 function install_homebrew
