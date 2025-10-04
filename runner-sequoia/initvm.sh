@@ -51,7 +51,7 @@ install_xcode_clt "16.4"
 set_hostname
 
 # software
-install_ccache
+install_ccache "4.12.1"
 install_gitlabrunner
 install_homebrew
 install_macports
