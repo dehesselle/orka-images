@@ -52,7 +52,7 @@ set_hostname
 
 # software
 install_ccache "4.12.1"
-install_gitlabrunner
+install_gitlabrunner "18.4.0"
 install_homebrew
 install_macports
 install_rust "1.89.0"
