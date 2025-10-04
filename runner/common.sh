@@ -63,7 +63,7 @@ function install_macports
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=2.11.5
+  local version=${1:-2.11.5}
 
   _create_ramdisk
   _mkdir /opt/macports
@@ -104,7 +104,7 @@ function install_rust
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=$1
+  local version=${1:-1.80.0}
 
   _mkdir /opt/rustup
 
@@ -206,7 +206,7 @@ function install_gitlabrunner
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=17.11.4
+  local version=${1:-17.11.4}
 
   _mkdir /usr/local/bin false
  
@@ -219,7 +219,7 @@ function install_ccache
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local ccache_ver=4.11.3
+  local ccache_ver=${1:-4.11.3}
   local ccache_url=https://github.com/ccache/ccache/releases/download/v$ccache_ver/ccache-$ccache_ver-darwin.tar.gz
 
   _mkdir /opt/ccache
