@@ -45,10 +45,11 @@ echo "----------------------------------------------------"
 
 bootstrap
 
-# OS updates and installs
+# system
 update_macos "macOS Sequoia 15.7.1-24G231"
 install_xcode_clt "16.4"
 set_hostname
+set_motd
 
 # software
 install_ccache "4.12.1"

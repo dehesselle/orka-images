@@ -170,9 +170,14 @@ function setup_bot_user
   _mkdir "$home"/.ssh
   sudo cp "$REPO_DIR"/runner/bot@runner_ecdsa.pub "$home"/.ssh/authorized_keys
   sudo chmod 600 "$home"/.ssh/authorized_keys
-  sudo bash -c "echo -e \"cat << EOF\n$(_banner)\nEOF\" > $home/.ssh/rc"
-  sudo bash -c "echo \"mv $home/.ssh/rc $home/.ssh/rc.disabled\" >> $home/.ssh/rc"
   sudo chown -R $BOT_USER_GROUP "$home"
+}
+
+function set_motd
+{
+  sudo touch /etc/motd
+  sudo chown $ADMIN_USER_GROUP /etc/motd
+  echo -e "$(_banner)" > /etc/motd
 }
 
 function install_homebrew

@@ -45,10 +45,11 @@ echo "----------------------------------------------------"
 
 bootstrap
 
-# OS updates and installs
+# system
 update_macos "macOS Sonoma 14.8-23J21"
 install_xcode_clt "16.2"
 set_hostname
+set_motd
 
 # software
 install_ccache
