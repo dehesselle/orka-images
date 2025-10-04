@@ -46,8 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # OS updates and installs
-# FIXME: this breaks the VM currently
-#update_macos "macOS Sequoia 15.7-24G222"
+update_macos "macOS Sequoia 15.7.1-24G231"
 install_xcode_clt "16.4"
 set_hostname
 
