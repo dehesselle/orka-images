@@ -96,7 +96,7 @@ function install_sdk
 
   local version=$1
 
-  _mkdir /opt/sdks
+  _mkdir /opt/sdks false
   tar -C /opt/sdks -xJf $PACKAGES_DIR/macosx"${version}"sdk.tar.xz
 }
 
