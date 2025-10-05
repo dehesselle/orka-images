@@ -48,8 +48,6 @@ bootstrap
 # system
 update_macos "macOS Sequoia 15.7.1-24G231"
 install_xcode_clt "16.4"
-set_hostname
-set_motd
 
 # software
 install_ccache "4.12.1"
@@ -59,6 +57,11 @@ install_macports
 install_rust "1.90.0"
 install_sdk 113
 install_sdk 155
+install_uv
+
+# configuration
+set_hostname
+set_motd
 
 # users
 setup_bot_user

@@ -59,6 +59,15 @@ function _create_ramdisk
   fi
 }
 
+function _reinitialize_repo
+{
+  git -C "$REPO_DIR" init
+  git -C "$REPO_DIR" remote add origin https://github.com/dehesselle/orka-images
+  git -C "$REPO_DIR" fetch
+  git -C "$REPO_DIR" reset --hard origin/main
+  git -C "$REPO_DIR" clean -f
+}
+
 function install_macports
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
@@ -115,43 +124,6 @@ function install_rust
           --no-modify-path
 }
 
-function _banner
-{
-  local version=${PRODUCT_VERSION%%.*}
-
-  # font "Small Block"
-  case $version in
-    14)
-      cat << EOF
-╔════════════════════════════════════════════╗
-║                                            ║
-║  ▙▀▖▌ ▌▛▀▖▛▀▖▞▀▖▙▀▖▄▄▖▞▀▘▞▀▖▛▀▖▞▀▖▛▚▀▖▝▀▖  ║
-║  ▌  ▌ ▌▌ ▌▌ ▌▛▀ ▌     ▝▀▖▌ ▌▌ ▌▌ ▌▌▐ ▌▞▀▌  ║
-║  ▘  ▝▀▘▘ ▘▘ ▘▝▀▘▘     ▀▀ ▝▀ ▘ ▘▝▀ ▘▝ ▘▝▀▘  ║
-║  image:    $(printf '%30s' "$(TZ=UTC date)")  ║
-║                                            ║
-╚════════════════════════════════════════════╝
-EOF
-      ;;
-    15)
-      cat << EOF
-╔═════════════════════════════════════════════╗
-║                                             ║
-║                                      ▗      ║
-║  ▙▀▖▌ ▌▛▀▖▛▀▖▞▀▖▙▀▖▄▄▖▞▀▘▞▀▖▞▀▌▌ ▌▞▀▖▄ ▝▀▖  ║
-║  ▌  ▌ ▌▌ ▌▌ ▌▛▀ ▌     ▝▀▖▛▀ ▚▄▌▌ ▌▌ ▌▐ ▞▀▌  ║
-║  ▘  ▝▀▘▘ ▘▘ ▘▝▀▘▘     ▀▀ ▝▀▘  ▌▝▀▘▝▀ ▀▘▝▀▘  ║
-║  image:     $(printf '%30s' "$(TZ=UTC date)")  ║
-║                                             ║
-╚═════════════════════════════════════════════╝
-EOF
-      ;;
-    *)
-      :
-      ;;
-  esac
-}
-
 function setup_bot_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
@@ -177,7 +149,22 @@ function set_motd
 {
   sudo touch /etc/motd
   sudo chown $ADMIN_USER_GROUP /etc/motd
-  echo -e "$(_banner)" > /etc/motd
+
+  local macos_version=${PRODUCT_VERSION%%.*}
+  local image_version
+  case "$macos_version" in
+    14) image_version="$(git -C "$REPO_DIR" describe --tags --match 'runner-sonoma*')" ;;
+    15) image_version="$(git -C "$REPO_DIR" describe --tags --match 'runner-sequoia*')" ;;
+    *)  image_version="$(git -C "$REPO_DIR" rev-parse --short HEAD)";;
+  esac
+
+  {
+    echo "═════════════════════════════════════════════════════════════════════"
+    uvx pyfiglet -f smblock "$image_version"
+    echo "source:  https://github.com/dehesselle/orka-images"
+    echo "created: $(date +'%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')"
+    echo "═════════════════════════════════════════════════════════════════════"
+  } > /etc/motd
 }
 
 function install_homebrew
@@ -258,6 +245,7 @@ function install_xcode_clt
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
     softwareupdate -i "Command Line Tools for Xcode-$version"
     rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    _reinitialize_repo
   fi
 }
 
@@ -270,6 +258,17 @@ function setup_admin_user
   chmod 600 "$HOME"/.ssh/authorized_keys
 
   sudo bash -c 'echo "%admin ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/admin_no_pw'
+}
+
+function install_uv
+{
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
+
+  local uv_ver=${1:-0.8.23}
+  local uv_url=https://github.com/astral-sh/uv/releases/download/$uv_ver/uv-aarch64-apple-darwin.tar.gz
+
+  _mkdir /usr/local/bin false
+  curl -L "$uv_url" | tar -C /usr/local/bin -xz --strip-components 1
 }
 
 ### main #######################################################################
