@@ -53,7 +53,7 @@ install_xcode "/Volumes/orka/packages/Xcode_16.4.xip"
 install_ccache "4.12.1"
 install_gitlabrunner "18.5.0"
 install_homebrew
-install_macports
+install_macports "2.11.6"
 install_rust "1.90.0"
 install_sdk 113
 install_sdk 155
