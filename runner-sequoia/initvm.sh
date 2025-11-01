@@ -47,7 +47,7 @@ bootstrap
 
 # system
 update_macos "macOS Sequoia 15.7.1-24G231"
-install_xcode_clt "16.4"
+install_xcode "/Volumes/orka/packages/Xcode_16.4.xip"
 
 # software
 install_ccache "4.12.1"

@@ -249,6 +249,20 @@ function install_xcode_clt
   fi
 }
 
+function install_xcode
+{
+  echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
+
+  local xip_archive=$1
+
+  (
+    cd /Applications || return
+    sudo xip -x "$xip_archive"
+    sudo xcodebuild -license accept
+    _reinitialize_repo
+  )
+}
+
 function setup_admin_user
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
