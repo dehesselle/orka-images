@@ -57,7 +57,7 @@ install_macports "2.11.6"
 install_rust "1.91.0"
 install_sdk 113
 install_sdk 155
-install_uv "0.9.7"
+install_uv "0.9.9"
 
 # configuration
 set_hostname
