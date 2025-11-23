@@ -47,17 +47,21 @@ bootstrap
 
 # system
 update_macos "macOS Sonoma 14.8-23J21"
-install_xcode_clt "16.2"
-set_hostname
-set_motd
+install_xcode "/Volumes/orka/packages/Xcode_15.4.xip"
 
 # software
-install_ccache
-install_gitlabrunner
+install_ccache "4.12.1"
+install_gitlabrunner "18.5.0"
 install_homebrew
-install_macports
-install_rust "1.89.0"
+install_macports "2.11.6"
+install_rust "1.91.1"
 install_sdk 113
+install_sdk 133
+install_uv "0.9.9"
+
+# configuration
+set_hostname
+set_motd
 
 # users
 setup_bot_user
