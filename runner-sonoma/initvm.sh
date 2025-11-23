@@ -46,7 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # system
-update_macos "macOS Sonoma 14.8-23J21"
+update_macos "macOS Sonoma 14.8.2-23J126"
 install_xcode "/Volumes/orka/packages/Xcode_15.4.xip"
 
 # software
