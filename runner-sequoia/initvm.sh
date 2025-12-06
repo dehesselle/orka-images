@@ -50,7 +50,7 @@ update_macos "macOS Sequoia 15.7.2-24G325"
 install_xcode "/Volumes/orka/packages/Xcode_16.4.xip"
 
 # software
-install_ccache "4.12.1"
+install_ccache
 install_gitlabrunner "18.5.0"
 install_homebrew
 install_macports "2.11.6"
