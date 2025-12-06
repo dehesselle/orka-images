@@ -51,7 +51,7 @@ install_xcode "/Volumes/orka/packages/Xcode_16.4.xip"
 
 # software
 install_ccache
-install_gitlabrunner "18.5.0"
+install_gitlabrunner
 install_homebrew
 install_macports "2.11.6"
 install_rust "1.91.1"
