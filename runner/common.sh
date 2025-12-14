@@ -72,7 +72,7 @@ function install_macports
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=${1:-2.11.5}
+  local version=${1:-2.11.6}
 
   _create_ramdisk
   _mkdir /opt/macports
