@@ -198,7 +198,7 @@ function install_gitlabrunner
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=${1:-18.6.5}
+  local version=${1:-18.8.0}
 
   _mkdir /usr/local/bin false
  
