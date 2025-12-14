@@ -54,7 +54,7 @@ install_ccache
 install_gitlabrunner
 install_homebrew
 install_macports
-install_rust "1.91.1"
+install_rust
 install_sdk 113
 install_sdk 133
 install_uv
