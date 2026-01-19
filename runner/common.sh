@@ -259,6 +259,7 @@ function install_xcode
     cd /Applications || return
     sudo xip -x "$xip_archive"
     sudo xcodebuild -license accept
+    sudo xcodebuild -runFirstLaunch
     _reinitialize_repo
   )
 }
