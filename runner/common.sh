@@ -147,23 +147,24 @@ function setup_bot_user
 
 function set_motd
 {
+  local tag=$1
+
   sudo touch /etc/motd
   sudo chown $ADMIN_USER_GROUP /etc/motd
 
-  local macos_version=${PRODUCT_VERSION%%.*}
   local image_version
-  case "$macos_version" in
-    14) image_version="$(git -C "$REPO_DIR" describe --tags --match 'runner-sonoma*')" ;;
-    15) image_version="$(git -C "$REPO_DIR" describe --tags --match 'runner-sequoia*')" ;;
-    *)  image_version="$(git -C "$REPO_DIR" rev-parse --short HEAD)";;
-  esac
+  if [ -z "$tag" ]; then
+    image_version=$(git -C "$REPO_DIR" rev-parse --short HEAD)
+  else
+    image_version=$(git -C "$REPO_DIR" describe --tags --match "${tag}-[0-9]*")
+  fi
 
   {
-    echo "═════════════════════════════════════════════════════════════════════"
+    echo "═════════════════════════════════════════════════════════════════════==========="
     uvx pyfiglet -f smblock "$image_version"
     echo "source:  https://github.com/dehesselle/orka-images"
     echo "created: $(date +'%Y-%m-%dT%H:%M:%S%z' | sed -E 's/([+-][0-9]{2})([0-9]{2})$/\1:\2/')"
-    echo "═════════════════════════════════════════════════════════════════════"
+    echo "═════════════════════════════════════════════════════════════════════==========="
   } > /etc/motd
 }
 

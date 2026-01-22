@@ -6,7 +6,7 @@
 
 ### description ################################################################
 
-# Initialize runner on Sonoma.
+# Initialize runner on Sequoia.
 
 ### shellcheck #################################################################
 
@@ -22,7 +22,7 @@ fi
 ### variables ##################################################################
 
 REPO_DIR=$HOME/orka-images
-SELF_NAME=runner-sonoma
+SELF_NAME=runner-sequoia
 
 ### functions ##################################################################
 
@@ -46,8 +46,8 @@ echo "----------------------------------------------------"
 bootstrap
 
 # system
-update_macos "macOS Sonoma 14.8.3-23J220"
-install_xcode "/Volumes/orka/packages/Xcode_15.4.xip"
+#update_macos "macOS Sequoia 15.7.3-24G419" # disabled, renders VM inaccessible
+install_xcode "/Volumes/orka/packages/Xcode_26.2_Apple_silicon.xip"
 
 # software
 install_ccache
@@ -61,7 +61,7 @@ install_uv
 
 # configuration
 set_hostname
-set_motd runner-sonoma
+set_motd runner-sequoia-xcode26
 
 # users
 setup_bot_user

@@ -61,7 +61,7 @@ install_uv
 
 # configuration
 set_hostname
-set_motd
+set_motd runner-sequoia
 
 # users
 setup_bot_user
