@@ -280,7 +280,7 @@ function install_uv
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local uv_ver=${1:-0.9.26}
+  local uv_ver=${1:-0.10.4}
   local uv_url=https://github.com/astral-sh/uv/releases/download/$uv_ver/uv-aarch64-apple-darwin.tar.gz
 
   _mkdir /usr/local/bin false
