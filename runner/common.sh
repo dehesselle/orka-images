@@ -113,7 +113,7 @@ function install_rust
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=${1:-1.92.0}
+  local version=${1:-1.93.1}
 
   _mkdir /opt/rustup
 
