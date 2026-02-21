@@ -72,16 +72,16 @@ function install_macports
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local version=${1:-2.11.6}
+  local version=${1:-2.12.1}
 
   _create_ramdisk
   _mkdir /opt/macports
 
-  curl -L https://github.com/macports/macports-base/releases/download/v$version/MacPorts-$version.tar.bz2 |
+  curl -L https://github.com/macports/macports-base/releases/download/v"$version"/MacPorts-"$version".tar.bz2 |
       tar -C /Volumes/RAM -xj
 
   (
-    cd /Volumes/RAM/MacPorts-$version || exit 1
+    cd /Volumes/RAM/MacPorts-"$version" || exit 1
     ./configure \
         --prefix=/opt/macports \
         --with-unsupported-prefix \
