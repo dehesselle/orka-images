@@ -46,7 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # system
-update_macos "macOS Sequoia 15.7.3-24G419"
+update_macos "macOS Sequoia 15.7.4-24G517"
 install_xcode "/Volumes/orka/packages/Xcode_16.4.xip"
 
 # software
