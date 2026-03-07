@@ -37,6 +37,21 @@ After the initial updates, the VM will reboot. Login again and run the following
 bash orka-images/runner-sequoia/initvm.sh
 ```
 
+### Tahoe runner
+
+Spin up a VM based on [`ghcr.io/macstadium/orka-images/tahoe:latest`](https://github.com/macstadium/orka-images/pkgs/container/orka-images%2Ftahoe). Run the following command inside that VM:
+
+
+```bash
+curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner-tahoe/initvm.sh | bash
+```
+
+After the initial updates, the VM will reboot. Login again and run the following command:
+
+```bash
+bash orka-images/runner-tahoe/initvm.sh
+```
+
 ## License
 
 This work is licensed under [GPL-2.0-or-later](LICENSE).
