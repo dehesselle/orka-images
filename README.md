@@ -26,7 +26,6 @@ bash orka-images/runner-sonoma/initvm.sh
 
 Spin up a VM based on [`ghcr.io/macstadium/orka-images/sequoia:latest`](https://github.com/macstadium/orka-images/pkgs/container/orka-images%2Fsequoia/543001984?tag=latest). Run the following command inside that VM:
 
-
 ```bash
 curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner-sequoia/initvm.sh | bash
 ```
@@ -40,7 +39,6 @@ bash orka-images/runner-sequoia/initvm.sh
 ### Tahoe runner
 
 Spin up a VM based on [`ghcr.io/macstadium/orka-images/tahoe:latest`](https://github.com/macstadium/orka-images/pkgs/container/orka-images%2Ftahoe). Run the following command inside that VM:
-
 
 ```bash
 curl -L https://raw.githubusercontent.com/dehesselle/orka-images/refs/heads/main/runner-tahoe/initvm.sh | bash
