@@ -46,8 +46,8 @@ echo "----------------------------------------------------"
 bootstrap
 
 # system
-# update_macos "macOS Tahoe 26.3.1-25D2128" # unupported
-install_xcode "/Volumes/orka/packages/Xcode_26.3_Universal.xip"
+update_macos "macOS Tahoe 26.5-25F71"
+install_xcode "/Volumes/orka/packages/Xcode_26.5_Universal.xip"
 
 # software
 install_ccache
