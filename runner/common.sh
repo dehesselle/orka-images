@@ -212,7 +212,7 @@ function install_ccache
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
-  local ccache_ver=${1:-4.12.2}
+  local ccache_ver=${1:-4.13.6}
   local ccache_url=https://github.com/ccache/ccache/releases/download/v$ccache_ver/ccache-$ccache_ver-darwin.tar.gz
 
   _mkdir /opt/ccache
