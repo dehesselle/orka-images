@@ -204,7 +204,7 @@ function install_gitlabrunner
   _mkdir /usr/local/bin false
 
   curl -o /usr/local/bin/gitlab-runner \
-      -L https://gitlab-runner-downloads.s3.amazonaws.com/v$version/binaries/gitlab-runner-darwin-arm64
+      -L https://gitlab-runner-downloads.s3.amazonaws.com/v"$version"/binaries/gitlab-runner-darwin-arm64
   chmod 755 /usr/local/bin/gitlab-runner
 }
 
