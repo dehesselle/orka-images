@@ -49,10 +49,14 @@ bootstrap
 update_macos "macOS Sonoma 14.8.7-23J520"
 install_xcode "/Volumes/orka/packages/Xcode_15.4.xip"
 
+# users
+setup_bot_user
+setup_admin_user
+
 # software
 install_ccache
 install_gitlabrunner
-install_homebrew
+install_homebrew bot
 install_macports
 install_rust
 install_sdk 113
@@ -62,9 +66,5 @@ install_uv
 # configuration
 set_hostname
 set_motd runner-sonoma
-
-# users
-setup_bot_user
-setup_admin_user
 
 echo "----------------------------------------------------"

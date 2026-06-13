@@ -172,10 +172,12 @@ function install_homebrew
 {
   echo -e "$ANSI_FG_YELLOW_BRIGHT${FUNCNAME[0]}$ANSI_FG_RESET"
 
+  local owner=$1
+
   _mkdir /opt/homebrew
   curl -L https://github.com/Homebrew/brew/tarball/main |
       tar xz --strip-components 1 -C /opt/homebrew
-  chmod -R g+w /opt/homebrew
+  sudo chown -R "$owner" /opt/homebrew
 }
 
 function set_hostname
