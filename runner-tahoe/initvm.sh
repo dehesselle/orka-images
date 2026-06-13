@@ -46,7 +46,7 @@ echo "----------------------------------------------------"
 bootstrap
 
 # system
-update_macos "macOS Tahoe 26.5-25F71"
+update_macos "macOS Tahoe 26.5.1-25F80"
 install_xcode "/Volumes/orka/packages/Xcode_26.5_Universal.xip"
 
 # software
